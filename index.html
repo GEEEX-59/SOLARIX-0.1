@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07966f">
 <meta name="description" content="SOLARIX — calculadora y dimensionamiento solar">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SOLARIX">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icons/icon-192.png">
 <title>SOLARIX</title>
@@ -105,8 +110,23 @@ $("save").onclick=save;$("pdf").onclick=pdf;document.querySelectorAll(".nav").fo
 render();calc();hist();
 
 let deferredPrompt;
-window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;$("installBtn").style.display="inline-block"});
-$("installBtn").onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;$("installBtn").style.display="none"};
+$("installBtn").style.display="inline-block";
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e});
+$("installBtn").onclick=async()=>{
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    const {outcome}=await deferredPrompt.userChoice;
+    if(outcome==="accepted") $("installBtn").style.display="none";
+    deferredPrompt=null;
+  } else {
+    const isiOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    if(isiOS){
+      alert("Para instalar en iPhone/iPad:\n1. Toca el botón 'Compartir' (el icono con una flecha hacia arriba) en Safari.\n2. Elige 'Agregar a inicio' (+).");
+    } else {
+      alert("Para instalar en tu celular:\n1. Toca el menú de 3 puntos (⋮) en la esquina superior derecha de tu navegador.\n2. Selecciona 'Instalar aplicación' o 'Agregar a la pantalla principal'.");
+    }
+  }
+};
 window.addEventListener("appinstalled",()=>{$("installBtn").style.display="none"});
 if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"));
 </script>
