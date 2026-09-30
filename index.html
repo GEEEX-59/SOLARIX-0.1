@@ -3,104 +3,519 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07966f">
+<meta name="theme-color" content="#7C3AED">
 <meta name="description" content="SOLARIX — calculadora y dimensionamiento solar">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <title>SOLARIX</title>
 <style>
-:root{--g:#07966f;--g2:#0eab80;--bg:#eef7f3;--card:#fff;--tx:#19352f;--mut:#6b7d78;--ln:#d9e9e3;--yl:#fff8df}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--tx);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-header{background:linear-gradient(135deg,#07835f,#10a87f);color:#fff;padding:18px 14px 28px;box-shadow:0 8px 25px #17483a18}
-.brand{max-width:1080px;margin:auto;display:flex;align-items:center;gap:13px}.logo{width:58px;height:58px;border-radius:16px;background:#ffffff22;display:grid;place-items:center;font-weight:900;font-size:27px;border:1px solid #ffffff30}.brand h1{margin:0;font-size:27px}.brand small{opacity:.86}
-nav{max-width:1080px;margin:13px auto 0;display:flex;gap:8px}.nav{background:#ffffff22;color:#fff;border:1px solid #ffffff35}.nav.active{background:#fff;color:#087a5d}
-main{max-width:1080px;margin:-14px auto 40px;padding:0 12px;position:relative}.view{display:none}.view.active{display:block}
-.card{background:var(--card);border:1px solid var(--ln);border-radius:23px;padding:19px;margin:17px 0;box-shadow:0 7px 24px #17483a0c}
-.st{display:flex;align-items:center;gap:11px;margin-bottom:17px}.num{width:43px;height:43px;border-radius:14px;background:#e4f6ef;color:#087a5d;display:grid;place-items:center;font-weight:900;font-size:19px}.st h2{margin:0;font-size:22px}
-.muted{color:var(--mut);font-size:13px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field label{display:block;font-size:13px;font-weight:800;color:#536a64;margin-bottom:6px}
-input{width:100%;height:49px;padding:9px 12px;border:2px solid #d9e4e0;border-radius:13px;background:#fff;color:#172f2a;font-size:17px;outline:none}input:focus{border-color:#65bba3;box-shadow:0 0 0 3px #65bba322}
-button{border:0;border-radius:13px;padding:11px 15px;font-weight:800;cursor:pointer}.primary{background:var(--g);color:#fff}.secondary{background:#e8f8f2;color:#087a5d}.danger{background:#fee2e2;color:#991b1b}
-.table-wrap{overflow:auto;border:1px solid var(--ln);border-radius:16px}table{width:100%;min-width:950px;border-collapse:collapse;font-size:13px}th{background:#eff9f5;color:#41635a;text-align:left;padding:11px 8px;white-space:nowrap}td{padding:6px;border-top:1px solid var(--ln)}td input{height:42px;font-size:14px;min-width:72px}
-tfoot td{font-weight:900;background:#fafdfb}.formula{margin-top:13px;padding:13px;border-radius:14px;background:#f7fbf9;line-height:1.6;font-size:13px}.addbar{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
-.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}.kpi{padding:16px;border:1px solid var(--ln);background:#f4fbf8;border-radius:17px}.kpi.yellow{background:var(--yl);border-color:#efd681}.kpi span{display:block;color:#72837e;font-size:13px}.kpi b{display:block;color:#075f4a;font-size:24px;margin-top:5px}.full{margin-top:11px}.note{padding:13px;margin-top:13px;background:#ecfbf5;border:1px solid #c9ebdf;border-radius:14px;line-height:1.6}
-.history{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid var(--ln);border-radius:15px;padding:13px;margin:8px 0}.toolbar{display:flex;gap:8px;flex-wrap:wrap}
-#installBtn{display:none}
-@media(max-width:700px){.grid2,.kpis{grid-template-columns:1fr}.card{padding:16px}.history{align-items:flex-start;flex-direction:column}}
-@media print{header,nav,.no-print{display:none!important}body{background:#fff}.view{display:none!important}#report{display:block!important}.card{box-shadow:none}}
+:root {
+  --primary: #7C3AED;
+  --primary-dark: #6D28D9;
+  --primary-light: #F3E8FF;
+  --primary-border: #E9D5FF;
+  --emerald: #059669;
+  --emerald-bg: #D1FAE5;
+  --bg: #F4F0F9;
+  --card: #ffffff;
+  --tx: #1E1B4B;
+  --mut: #6B7280;
+  --ln: #E5E7EB;
+  --yl: #FEF3C7;
+  --yl-border: #FCD34D;
+  --yl-tx: #B45309;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--tx);
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+header {
+  background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+  color: #fff;
+  padding: 18px 24px 28px;
+  box-shadow: 0 10px 25px rgba(109, 40, 217, 0.25);
+}
+.header-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.logo-icon {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 14px;
+  backdrop-filter: blur(8px);
+}
+.logo-icon .fxa {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1;
+  color: #ffffff;
+  letter-spacing: -1px;
+}
+.logo-icon .sol {
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1;
+  margin-top: 2px;
+}
+.brand-text h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+.brand-text small {
+  opacity: 0.9;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+nav {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.nav {
+  border: none;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.nav:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+.nav.active {
+  background: #ffffff;
+  color: #7C3AED;
+  border-color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+#installBtn {
+  display: none;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 14px;
+  background: #10B981;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+main {
+  max-width: 1100px;
+  margin: -12px auto 40px;
+  padding: 0 16px;
+  position: relative;
+}
+.view { display: none; }
+.view.active { display: block; }
+
+.card {
+  background: var(--card);
+  border: 1px solid rgba(233, 213, 255, 0.7);
+  border-radius: 24px;
+  padding: 24px 28px;
+  margin: 20px 0;
+  box-shadow: 0 10px 30px rgba(109, 40, 217, 0.04), 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.st {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.num {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--emerald-bg);
+  color: var(--emerald);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.st h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #1F2937;
+}
+
+.muted {
+  color: var(--mut);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.grid-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 6px;
+}
+input {
+  width: 100%;
+  height: 48px;
+  padding: 10px 14px;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 12px;
+  background: #FAFAFA;
+  color: #111827;
+  font-size: 15px;
+  font-weight: 500;
+  outline: none;
+  transition: all 0.2s ease;
+}
+input:focus {
+  border-color: var(--primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+button:active { transform: translateY(1px); }
+.primary {
+  background: linear-gradient(135deg, #7C3AED, #6D28D9);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+}
+.primary:hover {
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+  background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+}
+.secondary {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+}
+.secondary:hover {
+  background: var(--primary-border);
+}
+.danger {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+.danger:hover {
+  background: #FCA5A5;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--primary-border);
+  border-radius: 16px;
+  margin-top: 14px;
+}
+table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+th {
+  background: #F3E8FF;
+  color: #5B21B6;
+  text-align: left;
+  padding: 12px 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+td {
+  padding: 8px 10px;
+  border-top: 1px solid #F3E8FF;
+  color: #374151;
+}
+td input {
+  height: 40px;
+  font-size: 14px;
+  min-width: 65px;
+  border-radius: 8px;
+}
+tfoot td {
+  font-weight: 800;
+  background: #F9F5FF;
+  color: #6D28D9;
+  padding: 14px 10px;
+}
+
+.formula {
+  margin-top: 16px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: #F9F5FF;
+  border: 1px solid var(--primary-border);
+  line-height: 1.6;
+  font-size: 13px;
+  color: #4C1D95;
+}
+.addbar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.kpi {
+  padding: 18px;
+  border: 1px solid var(--primary-border);
+  background: #FAF5FF;
+  border-radius: 16px;
+}
+.kpi.yellow {
+  background: var(--yl);
+  border-color: var(--yl-border);
+}
+.kpi span {
+  display: block;
+  color: #6B7280;
+  font-size: 13px;
+  font-weight: 600;
+}
+.kpi b {
+  display: block;
+  color: var(--primary-dark);
+  font-size: 24px;
+  font-weight: 800;
+  margin-top: 6px;
+}
+.kpi.yellow b {
+  color: var(--yl-tx);
+}
+.full {
+  margin-top: 14px;
+}
+.note {
+  padding: 14px 18px;
+  margin-top: 16px;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  border-radius: 14px;
+  line-height: 1.6;
+  color: #065F46;
+}
+
+.history {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid var(--primary-border);
+  border-radius: 16px;
+  padding: 16px;
+  margin: 10px 0;
+  background: #FAFAFA;
+}
+.toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  header { padding: 16px 16px 24px; }
+  .header-container { flex-direction: column; align-items: flex-start; gap: 12px; }
+  nav { width: 100%; justify-content: flex-start; }
+  .grid2, .kpis { grid-template-columns: 1fr; }
+  .card { padding: 20px 16px; border-radius: 18px; }
+  .history { align-items: flex-start; flex-direction: column; }
+}
+@media print {
+  header, nav, .no-print { display: none !important; }
+  body { background: #fff; }
+  .view { display: none !important; }
+  #report { display: block !important; }
+  .card { box-shadow: none; border: none; }
+}
 </style>
 </head>
 <body>
 <header>
-<div class="brand"><div class="logo">S</div><div><h1>SOLARIX</h1><small>Calculadora y dimensionamiento solar</small></div></div>
-<nav class="no-print"><button class="nav active" data-view="calc">Crear proyecto</button><button class="nav" data-view="history">Historial</button><button id="installBtn">Instalar app</button></nav>
+  <div class="header-container">
+    <div class="brand">
+      <div class="logo-icon">
+        <span class="fxa">FXA</span>
+        <span class="sol">solarix</span>
+      </div>
+      <div class="brand-text">
+        <h1>SOLARIX</h1>
+        <small>Calculadora y dimensionamiento solar</small>
+      </div>
+    </div>
+    <nav class="no-print">
+      <button class="nav active" data-view="calc">Crear proyecto</button>
+      <button class="nav" data-view="history">Historial</button>
+      <button id="installBtn">Instalar app</button>
+    </nav>
+  </div>
 </header>
 <main>
-<section id="calc" class="view active">
-<div class="card">
-<div class="st"><div class="num">1</div><h2>Datos del sistema solar</h2></div>
-<div class="grid2">
-<div class="field"><label>Horas solares pico al día</label><input id="sun" type="number" inputmode="decimal" value="6" step=".001"></div>
-<div class="field"><label>Eficiencia del sistema (%)</label><input id="eff" type="number" inputmode="decimal" value="60" step=".001"></div>
-<div class="field"><label>Potencia por panel (W)</label><input id="panel" type="number" inputmode="decimal" value="100" step=".001"></div>
-<div class="field"><label>Voltaje del sistema (V)</label><input id="sysv" type="number" inputmode="decimal" value="127" step=".001"></div>
-<div class="field"><label>Días de gracia / almacenamiento</label><input id="days" type="number" inputmode="numeric" value="3" step="1"></div>
-<div class="field"><label>Nombre del proyecto</label><input id="name" type="text" placeholder="Ej. Vivienda Centro de México"></div>
-</div></div>
+  <section id="calc" class="view active">
+    <div class="card">
+      <div class="st"><div class="num">1</div><h2>Datos del sistema solar</h2></div>
+      <div class="grid-stack">
+        <div class="field">
+          <label>Nombre del proyecto</label>
+          <input id="name" type="text" placeholder="Ej. Vivienda Centro de México">
+        </div>
+        <div class="grid2">
+          <div class="field"><label>Horas solares pico al día</label><input id="sun" type="number" inputmode="decimal" value="6" step=".001"></div>
+          <div class="field"><label>Eficiencia del sistema (%)</label><input id="eff" type="number" inputmode="decimal" value="60" step=".001"></div>
+          <div class="field"><label>Potencia por panel (W)</label><input id="panel" type="number" inputmode="decimal" value="100" step=".001"></div>
+          <div class="field"><label>Voltaje del sistema (V)</label><input id="sysv" type="number" inputmode="decimal" value="127" step=".001"></div>
+          <div class="field"><label>Días de gracia / almacenamiento</label><input id="days" type="number" inputmode="numeric" value="3" step="1"></div>
+        </div>
+      </div>
+    </div>
 
-<div class="card">
-<div class="st"><div class="num">2</div><h2>Datos de vivienda</h2></div>
-<p class="muted">Puedes escribir normalmente. Corriente, potencia y voltaje se sincronizan sin perder el cursor.</p>
-<div class="table-wrap"><table><thead><tr><th>Equipo</th><th>Cant.</th><th>V</th><th>A</th><th>W</th><th>W total</th><th>h</th><th>Wh/día</th><th></th></tr></thead><tbody id="rows"></tbody><tfoot><tr><td colspan="7">TOTAL DE ENERGÍA AL DÍA</td><td id="daily">0 Wh</td><td></td></tr></tfoot></table></div>
-<div class="addbar no-print"><button class="secondary" id="add">+ Agregar aparato</button><button class="primary" id="calc">CALCULAR SISTEMA SOLAR</button></div>
-<div class="formula"><b>Relaciones:</b> P = V × I · I = P ÷ V · V = P ÷ I · Energía = P × horas × cantidad.<br>Al editar corriente se recalcula potencia; al editar potencia se recalcula corriente; al editar voltaje se conserva potencia y se recalcula corriente.</div>
-</div>
+    <div class="card">
+      <div class="st"><div class="num">2</div><h2>Datos de vivienda</h2></div>
+      <p class="muted">Puedes escribir directamente en corriente, potencia, voltaje, cantidad u horas. La tabla se actualiza sin reconstruirse para que el teclado no pierda el foco.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Equipo</th><th>Cant.</th><th>V</th><th>A</th><th>W</th><th>W total</th><th>h</th><th>Wh/día</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+          <tfoot>
+            <tr>
+              <td colspan="7">TOTAL DE ENERGÍA AL DÍA</td>
+              <td id="daily">0 Wh</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="addbar no-print">
+        <button class="secondary" id="add">+ Agregar aparato</button>
+        <button class="primary" id="calc">CALCULAR SISTEMA SOLAR</button>
+      </div>
+      <div class="formula">
+        <b>Relaciones:</b> P = V × I · I = P ÷ V · V = P ÷ I · Energía = P × horas × cantidad.<br>
+        Al editar corriente se recalcula potencia; al editar potencia se recalcula corriente; al editar voltaje se conserva potencia y se recalcula corriente.
+      </div>
+    </div>
 
-<div class="card">
-<div class="st"><div class="num">3</div><h2>Resultados de SOLARIX</h2></div>
-<div class="kpis">
-<div class="kpi"><span>Energía real diaria</span><b id="rd">0 Wh/día</b></div>
-<div class="kpi"><span>Energía de diseño</span><b id="rdes">0 Wh/día</b></div>
-<div class="kpi"><span>Potencia solar requerida</span><b id="rpv">0 W</b></div>
-<div class="kpi yellow"><span>Paneles necesarios</span><b id="rpan">0</b></div>
-<div class="kpi"><span>Potencia instalada</span><b id="rinst">0 W</b></div>
-<div class="kpi"><span>Corriente total aprox.</span><b id="rcur">0 A</b></div>
-</div>
-<div class="kpi full"><span>Almacenamiento para días de gracia</span><b id="rst">0 Wh</b><small class="muted" id="rstxt"></small></div>
-<div class="note" id="rec">Agrega o modifica equipos para ver el dimensionamiento.</div>
-<div class="formula" id="form"></div>
-</div>
+    <div class="card">
+      <div class="st"><div class="num">3</div><h2>Resultados de SOLARIX</h2></div>
+      <div class="kpis">
+        <div class="kpi"><span>Energía real diaria</span><b id="rd">0 Wh/día</b></div>
+        <div class="kpi"><span>Energía de diseño</span><b id="rdes">0 Wh/día</b></div>
+        <div class="kpi"><span>Potencia solar requerida</span><b id="rpv">0 W</b></div>
+        <div class="kpi yellow"><span>Paneles necesarios</span><b id="rpan">0</b></div>
+        <div class="kpi"><span>Potencia instalada</span><b id="rinst">0 W</b></div>
+        <div class="kpi"><span>Corriente total aprox.</span><b id="rcur">0 A</b></div>
+      </div>
+      <div class="kpi full"><span>Almacenamiento para días de gracia</span><b id="rst">0 Wh</b><small class="muted" id="rstxt"></small></div>
+      <div class="note" id="rec">Agrega o modifica equipos para ver el dimensionamiento.</div>
+      <div class="formula" id="form"></div>
+    </div>
 
-<div class="card">
-<div class="st"><div class="num">4</div><h2>Energía por periodo</h2></div>
-<div class="kpis">
-<div class="kpi"><span>Energía al día</span><b id="d1">0 Wh</b></div>
-<div class="kpi"><span>Energía a la semana</span><b id="d7">0 Wh</b></div>
-<div class="kpi"><span>Energía al mes (30 días)</span><b id="d30">0 Wh</b></div>
-<div class="kpi"><span>Energía almacenada</span><b id="dst">0 Wh</b></div>
-</div>
-<div class="formula">Semana = día × 7 · Mes = día × 30 · Almacenamiento = día × días de gracia.</div>
-</div>
+    <div class="card">
+      <div class="st"><div class="num">4</div><h2>Energía por periodo</h2></div>
+      <div class="kpis">
+        <div class="kpi"><span>Energía al día</span><b id="d1">0 Wh</b></div>
+        <div class="kpi"><span>Energía a la semana</span><b id="d7">0 Wh</b></div>
+        <div class="kpi"><span>Energía al mes (30 días)</span><b id="d30">0 Wh</b></div>
+        <div class="kpi"><span>Energía almacenada</span><b id="dst">0 Wh</b></div>
+      </div>
+      <div class="formula">Semana = día × 7 · Mes = día × 30 · Almacenamiento = día × días de gracia.</div>
+    </div>
 
-<div class="card no-print"><div class="toolbar"><button class="primary" id="save">Guardar proyecto</button><button class="secondary" id="pdf">Generar PDF</button></div></div>
-</section>
+    <div class="card no-print">
+      <div class="toolbar">
+        <button class="primary" id="save">Guardar proyecto</button>
+        <button class="secondary" id="pdf">Generar PDF</button>
+      </div>
+    </div>
+  </section>
 
-<section id="history" class="view"><div class="card"><div class="st"><div class="num">↺</div><h2>Historial de proyectos</h2></div><p class="muted">Se guarda en el dispositivo mediante almacenamiento local.</p><div id="hist"></div></div></section>
-<section id="report"></section>
+  <section id="history" class="view">
+    <div class="card">
+      <div class="st"><div class="num">↺</div><h2>Historial de proyectos</h2></div>
+      <p class="muted">Se guarda en el dispositivo mediante almacenamiento local.</p>
+      <div id="hist"></div>
+    </div>
+  </section>
+
+  <section id="report"></section>
 </main>
 
 <script>
 const seed=[["Lámpara exterior",1,127,.78,100,4],["Cargador PC",1,127,.51,65,.5],["Parrilla eléctrica",1,127,12,1524,.25],["Pantalla T.V.",1,127,2.2,279.4,2],["Lámpara casa",1,127,.39,50,1],["Cargador celular",1,127,.25,33,1.5],["Lámparas ext.",2,127,.39,50,6],["Ventilador",1,127,3,381,1]];
 let data=JSON.parse(JSON.stringify(seed)); const $=x=>document.getElementById(x); const R3=x=>Math.round((Number(x)||0)*1000)/1000; const F=x=>R3(x).toLocaleString("es-MX",{maximumFractionDigits:3});
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
-function render(){ $("rows").innerHTML=data.map((r,i)=>`<tr data-i="${i}"><td><input class=n value="${esc(r[0])}"></td><td><input class=q type=number inputmode=decimal step=.001 value="${r[1]}"></td><td><input class=v type=number inputmode=decimal step=.001 value="${r[2]}"></td><td><input class=a type=number inputmode=decimal step=.001 value="${r[3]}"></td><td><input class=p type=number inputmode=decimal step=.001 value="${r[4]}"></td><td class=pt>${F(r[4]*r[1])}</td><td><input class=h type=number inputmode=decimal step=.001 value="${r[5]}"></td><td class=e>${F(r[4]*r[1]*r[5])}</td><td><button class=danger type=button>×</button></td></tr>`).join(""); document.querySelectorAll("#rows tr").forEach((tr,i)=>{let n=c=>tr.querySelector(c);n(".n").oninput=e=>data[i][0]=e.target.value;n(".q").oninput=e=>edit(i,"q",e.target.value);n(".v").oninput=e=>edit(i,"v",e.target.value);n(".a").oninput=e=>edit(i,"a",e.target.value);n(".p").oninput=e=>edit(i,"p",e.target.value);n(".h").oninput=e=>edit(i,"h",e.target.value);n("button").onclick=()=>{data.splice(i,1);render();calc()}})}
+function render(){ $("rows").innerHTML=data.map((r,i)=>`<tr data-i="${i}"><td><input class="n" value="${esc(r[0])}"></td><td><input class="q" type="number" inputmode="decimal" step=".001" value="${r[1]}"></td><td><input class="v" type="number" inputmode="decimal" step=".001" value="${r[2]}"></td><td><input class="a" type="number" inputmode="decimal" step=".001" value="${r[3]}"></td><td><input class="p" type="number" inputmode="decimal" step=".001" value="${r[4]}"></td><td class="pt">${F(r[4]*r[1])}</td><td><input class="h" type="number" inputmode="decimal" step=".001" value="${r[5]}"></td><td class="e">${F(r[4]*r[1]*r[5])}</td><td><button class="danger" type="button" aria-label="Eliminar fila">×</button></td></tr>`).join(""); document.querySelectorAll("#rows tr").forEach((tr,i)=>{let n=c=>tr.querySelector(c);n(".n").oninput=e=>data[i][0]=e.target.value;n(".q").oninput=e=>edit(i,"q",e.target.value);n(".v").oninput=e=>edit(i,"v",e.target.value);n(".a").oninput=e=>edit(i,"a",e.target.value);n(".p").oninput=e=>edit(i,"p",e.target.value);n(".h").oninput=e=>edit(i,"h",e.target.value);n("button").onclick=()=>{data.splice(i,1);render();calc()}})}
 function edit(i,t,x){let r=data[i],v=R3(x);if(t=="q")r[1]=v;if(t=="h")r[5]=v;if(t=="a"){r[3]=v;r[4]=R3(r[2]*r[3])}if(t=="p"){r[4]=v;r[3]=R3(r[2]?r[4]/r[2]:0)}if(t=="v"){r[2]=v;r[3]=R3(r[2]?r[4]/r[2]:0)}let tr=document.querySelector(`tr[data-i="${i}"]`);tr.querySelector(".pt").textContent=F(r[4]*r[1]);tr.querySelector(".e").textContent=F(r[4]*r[1]*r[5]);if(t!="a")tr.querySelector(".a").value=r[3];if(t!="p")tr.querySelector(".p").value=r[4];if(t!="v")tr.querySelector(".v").value=r[2];calc()}
 function calc(){let day=data.reduce((s,r)=>s+r[4]*r[1]*r[5],0),eff=Math.max(1,Number($("eff").value)||60)/100,sun=Number($("sun").value)||6,pw=Number($("panel").value)||100,days=Math.max(1,Number($("days").value)||3),sv=Number($("sysv").value)||127,des=day/eff,pv=sun?des/sun:0,np=Math.ceil(pv/pw),inst=np*pw,cur=data.reduce((s,r)=>s+r[4]*r[1],0)/sv,st=day*days;$("daily").textContent=F(day)+" Wh";$("rd").textContent=F(day)+" Wh/día";$("rdes").textContent=F(des)+" Wh/día";$("rpv").textContent=F(pv)+" W";$("rpan").textContent=np;$("rinst").textContent=F(inst)+" W";$("rcur").textContent=F(cur)+" A";$("rst").textContent=F(st)+" Wh";$("rstxt").textContent=`${F(days)} día(s) de autonomía · ${F(day)} Wh/día × ${F(days)} días`;$("d1").textContent=F(day)+" Wh";$("d7").textContent=F(day*7)+" Wh";$("d30").textContent=F(day*30)+" Wh";$("dst").textContent=F(st)+" Wh";$("rec").innerHTML=`Con ${F(sun)} horas solares pico y ${F(eff*100)}% de eficiencia: <b>${np} panel(es) de ${F(pw)} W</b>, ${F(inst)} W instalados.`;$("form").innerHTML=`${F(day)} ÷ ${F(eff*100)}% = ${F(des)} Wh/día de diseño · ÷ ${F(sun)} h = ${F(pv)} W · ÷ ${F(pw)} W = <b>${np} paneles</b>.<br><b>Días de gracia:</b> ${F(day)} × ${F(days)} = ${F(st)} Wh.`}
 ["sun","eff","panel","sysv","days"].forEach(id=>$(id).oninput=calc);$("add").onclick=()=>{data.push(["Nuevo equipo",1,127,1,127,1]);render();calc()};$("calc").onclick=calc;
 function obj(){return{name:$("name").value.trim()||"Proyecto sin nombre",sun:+$("sun").value,eff:+$("eff").value,panel:+$("panel").value,sysv:+$("sysv").value,days:+$("days").value,data:JSON.parse(JSON.stringify(data)),date:new Date().toISOString()}}
 function save(){let a=JSON.parse(localStorage.solarix||"[]");a.unshift(obj());localStorage.solarix=JSON.stringify(a);hist();alert("Proyecto guardado correctamente.")}
-function hist(){let a=JSON.parse(localStorage.solarix||"[]");$("hist").innerHTML=a.length?a.map((p,i)=>`<div class=history><div><b>${esc(p.name)}</b><br><small class=muted>${new Date(p.date).toLocaleString("es-MX")}</small></div><div class=toolbar><button class=secondary onclick='loadP(${i})'>Abrir</button><button class=danger onclick='delP(${i})'>Eliminar</button></div></div>`).join(""):"<p class=muted>No hay proyectos guardados.</p>"}
+function hist(){let a=JSON.parse(localStorage.solarix||"[]");$("hist").innerHTML=a.length?a.map((p,i)=>`<div class="history"><div><b>${esc(p.name)}</b><br><small class="muted">${new Date(p.date).toLocaleString("es-MX")}</small></div><div class="toolbar"><button class="secondary" onclick='loadP(${i})'>Abrir</button><button class="danger" onclick='delP(${i})'>Eliminar</button></div></div>`).join(""):"<p class=\"muted\">No hay proyectos guardados.</p>"}
 window.loadP=i=>{let p=JSON.parse(localStorage.solarix||"[]")[i];$("name").value=p.name;$("sun").value=p.sun;$("eff").value=p.eff;$("panel").value=p.panel;$("sysv").value=p.sysv;$("days").value=p.days;data=p.data;render();calc();document.querySelector('[data-view=calc]').click()};window.delP=i=>{let a=JSON.parse(localStorage.solarix||"[]");a.splice(i,1);localStorage.solarix=JSON.stringify(a);hist()};
-function pdf(){let p=obj(),day=data.reduce((s,r)=>s+r[4]*r[1]*r[5],0),des=day/(p.eff/100),pv=des/p.sun,np=Math.ceil(pv/p.panel),st=day*p.days;$("report").innerHTML=`<div class=card><h1 style="color:#087a5d">SOLARIX</h1><h2>${esc(p.name)}</h2><p>Informe · ${new Date().toLocaleDateString("es-MX")}</p><div class=kpis><div class=kpi><span>Energía diaria</span><b>${F(day)} Wh</b></div><div class=kpi><span>Semanal</span><b>${F(day*7)} Wh</b></div><div class=kpi><span>Mensual</span><b>${F(day*30)} Wh</b></div><div class=kpi><span>Almacenamiento ${p.days} días</span><b>${F(st)} Wh</b></div></div><h2>Resultados</h2><p>Potencia FV requerida: <b>${F(pv)} W</b></p><p>Paneles: <b>${np} × ${F(p.panel)} W</b></p><table><thead><tr><th>Equipo</th><th>Cant.</th><th>V</th><th>A</th><th>W</th><th>h</th><th>Wh/día</th></tr></thead><tbody>${data.map(r=>`<tr><td>${esc(r[0])}</td><td>${F(r[1])}</td><td>${F(r[2])}</td><td>${F(r[3])}</td><td>${F(r[4])}</td><td>${F(r[5])}</td><td>${F(r[4]*r[1]*r[5])}</td></tr>`).join("")}</tbody></table><p><b>Configuración:</b> ${F(p.sun)} h solares · ${F(p.eff)}% eficiencia · ${p.days} días.</p></div>`;document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));$("report").style.display="block";print();setTimeout(()=>{$("report").style.display="none";$("calc").classList.add("active")},600)}
+function pdf(){let p=obj(),day=data.reduce((s,r)=>s+r[4]*r[1]*r[5],0),des=day/(p.eff/100),pv=des/p.sun,np=Math.ceil(pv/p.panel),st=day*p.days;$("report").innerHTML=`<div class="card"><h1 style="color:#7C3AED">SOLARIX</h1><h2>${esc(p.name)}</h2><p>Informe · ${new Date().toLocaleDateString("es-MX")}</p><div class="kpis"><div class="kpi"><span>Energía diaria</span><b>${F(day)} Wh</b></div><div class="kpi"><span>Semanal</span><b>${F(day*7)} Wh</b></div><div class="kpi"><span>Mensual</span><b>${F(day*30)} Wh</b></div><div class="kpi"><span>Almacenamiento ${p.days} días</span><b>${F(st)} Wh</b></div></div><h2>Resultados</h2><p>Potencia FV requerida: <b>${F(pv)} W</b></p><p>Paneles: <b>${np} × ${F(p.panel)} W</b></p><table><thead><tr><th>Equipo</th><th>Cant.</th><th>V</th><th>A</th><th>W</th><th>h</th><th>Wh/día</th></tr></thead><tbody>${data.map(r=>`<tr><td>${esc(r[0])}</td><td>${F(r[1])}</td><td>${F(r[2])}</td><td>${F(r[3])}</td><td>${F(r[4])}</td><td>${F(r[5])}</td><td>${F(r[4]*r[1]*r[5])}</td></tr>`).join("")}</tbody></table><p><b>Configuración:</b> ${F(p.sun)} h solares · ${F(p.eff)}% eficiencia · ${p.days} días.</p></div>`;document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));$("report").style.display="block";print();setTimeout(()=>{$("report").style.display="none";$("calc").classList.add("active")},600)}
 $("save").onclick=save;$("pdf").onclick=pdf;document.querySelectorAll(".nav").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));$(b.dataset.view).classList.add("active");if(b.dataset.view=="history")hist()});
 render();calc();hist();
 
@@ -110,4 +525,5 @@ $("installBtn").onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.promp
 window.addEventListener("appinstalled",()=>{$("installBtn").style.display="none"});
 if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"));
 </script>
-</body></html>
+</body>
+</html>
